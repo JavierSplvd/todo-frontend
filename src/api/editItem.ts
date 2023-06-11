@@ -4,7 +4,7 @@ export const editItem = async (body: {
 }): Promise<number | undefined> => {
   try {
     const response = await fetch("http://localhost:8000/items/", {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(body),
       headers: { "Content-Type": "application/json" },
     });

@@ -11,9 +11,14 @@ type ItemListProps = {
 export const ItemList: React.FC<ItemListProps> = (props) => {
   console.log(props);
   return (
-    <Box width="100%">
+    <Box height="calc(100vh - 20rem)" width="100%" overflowY="auto">
       {props.items.map((it, index) => (
-        <ItemCard key={index} item={it} onDelete={props.onDelete} editItem={props.editItem}/>
+        <ItemCard
+          key={index}
+          item={it}
+          onDelete={props.onDelete}
+          editItem={props.editItem}
+        />
       ))}
     </Box>
   );

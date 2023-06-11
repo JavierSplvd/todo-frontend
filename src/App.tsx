@@ -78,7 +78,7 @@ export const App = () => {
     editItem({ id, title }).then((res) => {
       if (res === 200) {
         toast({
-          title: "Item created.",
+          title: "Item edited.",
           status: "success",
           duration: 2000,
           isClosable: false,
