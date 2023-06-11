@@ -5,6 +5,7 @@ export const postItem = async (body: {
     const response = await fetch("http://localhost:8000/items/", {
       method: "POST",
       body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
     });
     return response.status;
   } catch (error) {

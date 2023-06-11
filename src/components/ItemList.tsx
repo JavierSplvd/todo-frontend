@@ -5,6 +5,7 @@ import { ItemCard } from "./ItemCard";
 type ItemListProps = {
   items: Item[];
   onDelete: (id: string) => void;
+  editItem: (id: string, title: string) => void;
 };
 
 export const ItemList: React.FC<ItemListProps> = (props) => {
@@ -12,7 +13,7 @@ export const ItemList: React.FC<ItemListProps> = (props) => {
   return (
     <Box width="100%">
       {props.items.map((it, index) => (
-        <ItemCard key={index} item={it} onDelete={props.onDelete} />
+        <ItemCard key={index} item={it} onDelete={props.onDelete} editItem={props.editItem}/>
       ))}
     </Box>
   );

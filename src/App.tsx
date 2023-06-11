@@ -8,12 +8,13 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
+import { deleteItem } from "./api/deleteItem";
 import { getItems } from "./api/getItems";
 import { postItem } from "./api/postItem";
 import { CreateInput } from "./components/CreateInput";
 import { ItemList } from "./components/ItemList";
 import { Item } from "./entities/Item";
-import { deleteItem } from "./api/deleteItem";
+import { editItem } from "./api/editItem";
 
 export const App = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -73,6 +74,30 @@ export const App = () => {
     return;
   };
 
+  const onEdit = (id: string, title: string) => {
+    editItem({ id, title }).then((res) => {
+      if (res === 200) {
+        toast({
+          title: "Item created.",
+          status: "success",
+          duration: 2000,
+          isClosable: false,
+        });
+        getItems().then((res) => {
+          if (res) setItems(res);
+        });
+      } else {
+        toast({
+          title: "Error.",
+          status: "error",
+          duration: 2000,
+          isClosable: false,
+        });
+      }
+    });
+    return;
+  };
+
   return (
     <ChakraProvider theme={theme}>
       <Flex p="3rem" minH="100vh" flexDirection="column" alignItems="center">
@@ -93,7 +118,7 @@ export const App = () => {
           <Image height="4rem" width="4rem" src="android-chrome-512x512.png" />
           <Text fontSize="2xl">Your tasks:</Text>
           <CreateInput onSubmit={onCreate} />
-          <ItemList items={items} onDelete={onDelete} />
+          <ItemList items={items} onDelete={onDelete} editItem={onEdit} />
         </Flex>
       </Flex>
     </ChakraProvider>
