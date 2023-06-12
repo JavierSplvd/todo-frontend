@@ -1,5 +1,6 @@
 export const postItem = async (body: {
   title: string;
+  done: boolean;
 }): Promise<number | undefined> => {
   try {
     const response = await fetch("http://localhost:8000/items/", {

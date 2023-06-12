@@ -12,7 +12,7 @@ import { EditModal } from "./EditModal";
 type ItemProps = {
   item: Item;
   onDelete: (id: string) => void;
-  editItem: (id: string, title: string) => void;
+  editItem: (body: { id: string; title: string; done: boolean }) => void;
 };
 
 export const ItemCard: React.FC<ItemProps> = (props) => {

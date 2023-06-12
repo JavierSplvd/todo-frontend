@@ -1,9 +1,11 @@
 import {
+  Button,
   ChakraProvider,
   Flex,
   Image,
   Text,
   theme,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -11,13 +13,14 @@ import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { deleteItem } from "./api/deleteItem";
 import { getItems } from "./api/getItems";
 import { postItem } from "./api/postItem";
-import { CreateInput } from "./components/CreateInput";
+import { CreateModal } from "./components/CreateModal";
 import { ItemList } from "./components/ItemList";
 import { Item } from "./entities/Item";
 import { editItem } from "./api/editItem";
 
 export const App = () => {
   const [items, setItems] = useState<Item[]>([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   useEffect(() => {
@@ -50,7 +53,7 @@ export const App = () => {
     return;
   };
 
-  const onCreate = (body: { title: string }) => {
+  const onCreate = (body: { title: string; done: boolean }) => {
     postItem(body).then((res) => {
       if (res === 200) {
         toast({
@@ -74,8 +77,8 @@ export const App = () => {
     return;
   };
 
-  const onEdit = (id: string, title: string) => {
-    editItem({ id, title }).then((res) => {
+  const onEdit = (body: { id: string; title: string; done: boolean }) => {
+    editItem(body).then((res) => {
       if (res === 200) {
         toast({
           title: "Item edited.",
@@ -108,7 +111,6 @@ export const App = () => {
           right="1rem"
         />
         <Flex
-          backgroundColor="white"
           flexDirection="column"
           alignItems="center"
           gap="1rem"
@@ -116,8 +118,11 @@ export const App = () => {
           maxWidth="45rem"
         >
           <Image height="4rem" width="4rem" src="android-chrome-512x512.png" />
-          <Text fontSize="2xl">Your tasks:</Text>
-          <CreateInput onSubmit={onCreate} />
+          <Flex width="100%" justifyContent="space-between">
+            <Text fontSize="2xl">Your tasks:</Text>
+            <Button onClick={onOpen}>Add task</Button>
+          </Flex>
+          <CreateModal isOpen={isOpen} onClose={onClose} onSubmit={onCreate} />
           <ItemList items={items} onDelete={onDelete} editItem={onEdit} />
         </Flex>
       </Flex>

@@ -1,8 +1,8 @@
 import {
   Button,
-  Checkbox,
-  Flex,
   Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,18 +13,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { Item } from "../entities/Item";
 
-type EditModalProps = {
-  item: Item;
+type CreateModalProps = {
+  onSubmit: (body: { title: string; done: boolean }) => void;
   isOpen: boolean;
   onClose: () => void;
-  editItem: (body: { id: string; title: string; done: boolean }) => void;
 };
 
-export const EditModal: React.FC<EditModalProps> = (props) => {
-  const [input, setInput] = useState(props.item.title);
-  const [isDone, setIsDone] = useState(props.item.done);
+export const CreateModal: React.FC<CreateModalProps> = (props) => {
+  const [input, setInput] = useState("");
 
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose}>
@@ -36,25 +33,12 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
           <Text marginBottom="0.5rem">Title</Text>
           <Input
             width="100%"
+            placeholder="Add a new task"
             onChange={(ev) => {
               const newValue = ev.currentTarget.value;
               setInput(newValue);
             }}
-            defaultValue={props.item.title}
-            marginBottom="2rem"
           />
-          <Flex justifyContent="space-between">
-            <Text>Mark as done</Text>
-            <Checkbox
-              onChange={(ev) => {
-                const newValue = Boolean(ev.currentTarget.checked);
-                console.log("newvalue", newValue, ev.currentTarget.checked);
-                setIsDone(newValue);
-              }}
-              defaultChecked={props.item.done}
-              marginBottom="2rem"
-            />
-          </Flex>
         </ModalBody>
 
         <ModalFooter>
@@ -64,10 +48,9 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
           <Button
             colorScheme="green"
             onClick={() => {
-              props.editItem({
-                id: props.item.id,
+              props.onSubmit({
                 title: input,
-                done: isDone,
+                done: false,
               });
               props.onClose();
             }}

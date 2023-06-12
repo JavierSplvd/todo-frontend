@@ -5,11 +5,10 @@ import { ItemCard } from "./ItemCard";
 type ItemListProps = {
   items: Item[];
   onDelete: (id: string) => void;
-  editItem: (id: string, title: string) => void;
+  editItem: (body: { id: string; title: string; done: boolean }) => void;
 };
 
 export const ItemList: React.FC<ItemListProps> = (props) => {
-  console.log(props);
   return (
     <Box height="calc(100vh - 20rem)" width="100%" overflowY="auto">
       {props.items.map((it, index) => (
