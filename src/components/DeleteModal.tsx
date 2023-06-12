@@ -1,6 +1,5 @@
 import {
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,17 +9,15 @@ import {
   ModalOverlay,
   Text
 } from "@chakra-ui/react";
-import { useState } from "react";
 
-type CreateModalProps = {
-  onSubmit: (body: { title: string; done: boolean }) => void;
+type DeleteModalProps = {
+  id: string;
   isOpen: boolean;
   onClose: () => void;
+  onDelete: (id: string) => void;
 };
 
-export const CreateModal: React.FC<CreateModalProps> = (props) => {
-  const [input, setInput] = useState("");
-
+export const DeleteModal: React.FC<DeleteModalProps> = (props) => {
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose}>
       <ModalOverlay />
@@ -28,15 +25,7 @@ export const CreateModal: React.FC<CreateModalProps> = (props) => {
         <ModalHeader>Edit item</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text marginBottom="0.5rem">Title</Text>
-          <Input
-            width="100%"
-            placeholder="Add a new task"
-            onChange={(ev) => {
-              const newValue = ev.currentTarget.value;
-              setInput(newValue);
-            }}
-          />
+          <Text marginBottom="0.5rem">Do you want to delete this task?</Text>
         </ModalBody>
 
         <ModalFooter>
@@ -44,16 +33,13 @@ export const CreateModal: React.FC<CreateModalProps> = (props) => {
             Close
           </Button>
           <Button
-            colorScheme="green"
+            colorScheme="red"
             onClick={() => {
-              props.onSubmit({
-                title: input,
-                done: false,
-              });
+              props.onDelete(props.id);
               props.onClose();
             }}
           >
-            Save
+            Delete
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -3,6 +3,7 @@ import {
   ChakraProvider,
   Flex,
   Image,
+  Input,
   Text,
   theme,
   useDisclosure,
@@ -11,12 +12,12 @@ import {
 import { useEffect, useState } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { deleteItem } from "./api/deleteItem";
-import { getItems } from "./api/getItems";
 import { postItem } from "./api/postItem";
 import { CreateModal } from "./components/CreateModal";
 import { ItemList } from "./components/ItemList";
 import { Item } from "./entities/Item";
 import { editItem } from "./api/editItem";
+import { getItemsWithFilter } from "./api/getItemsWithFilter";
 
 export const App = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -24,7 +25,7 @@ export const App = () => {
   const toast = useToast();
 
   useEffect(() => {
-    getItems().then((res) => {
+    getItemsWithFilter().then((res) => {
       if (res) setItems(res);
     });
   }, []);
@@ -38,7 +39,7 @@ export const App = () => {
           duration: 2000,
           isClosable: false,
         });
-        getItems().then((res) => {
+        getItemsWithFilter().then((res) => {
           if (res) setItems(res);
         });
       } else {
@@ -62,7 +63,7 @@ export const App = () => {
           duration: 2000,
           isClosable: false,
         });
-        getItems().then((res) => {
+        getItemsWithFilter().then((res) => {
           if (res) setItems(res);
         });
       } else {
@@ -86,7 +87,7 @@ export const App = () => {
           duration: 2000,
           isClosable: false,
         });
-        getItems().then((res) => {
+        getItemsWithFilter().then((res) => {
           if (res) setItems(res);
         });
       } else {
@@ -122,6 +123,17 @@ export const App = () => {
             <Text fontSize="2xl">Your tasks:</Text>
             <Button onClick={onOpen}>Add task</Button>
           </Flex>
+          <Input
+            placeholder="Search"
+            onChange={(ev) => {
+              const newValue = ev.currentTarget.value;
+              getItemsWithFilter(newValue === "" ? undefined : newValue).then(
+                (res) => {
+                  if (res) setItems(res);
+                }
+              );
+            }}
+          ></Input>
           <CreateModal isOpen={isOpen} onClose={onClose} onSubmit={onCreate} />
           <ItemList items={items} onDelete={onDelete} editItem={onEdit} />
         </Flex>

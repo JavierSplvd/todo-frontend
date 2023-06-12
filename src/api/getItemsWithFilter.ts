@@ -1,8 +1,13 @@
 import { Item } from "../entities/Item";
 
-export const getItems = async (): Promise<Item[] | undefined> => {
+export const getItemsWithFilter = async (
+  searchString?: string
+): Promise<Item[] | undefined> => {
   try {
-    const response = await fetch("http://localhost:8000/items/");
+    const response = await fetch(
+      "http://localhost:8000/items/" +
+        (searchString ? "?title=" + searchString : "")
+    );
     if (response.ok) {
       const data: Item[] = await response.json();
       return data;
